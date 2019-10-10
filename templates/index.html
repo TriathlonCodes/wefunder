@@ -1,0 +1,44 @@
+<html>
+	<head>
+	</head>
+	<BODY>
+		<div id="add-players">
+			<p>Comma separated list of players</p>
+			<form  role="form" method='POST' action='/add_users'>
+			<input type="tex" name="user_list">
+				<button type='submit'>Submit</button>
+			</form>
+			<form  role="form" method='POST' action='/generate'>
+				<input name="new" hidden="true" value='true'>
+				<button type="submit" id='generate_new'>Generate New Matches</button>
+			</form>
+		</div>
+		<div>
+			<ul>
+				{% for round, matches in rounds.items() %}
+				<p>round {{round}}</p>
+				<p>matches</p>
+				<ul>
+					{% for match in matches %}
+						<li key={match.match_id}><p>{{ match.user_1_id }} vs. {{ match.user_2_id}} </p>
+							{% if match.winner_id %}
+								<p>Winner: {{ match.winner_id }}</p></li>
+							{% else %}
+								<form  role="form" method='POST' action='/play'>play
+									<input type="num" name="match_id" value={{match.match_id}} hidden="true">
+									<input type="num" name="winner_id">
+									<button>Submit</button>
+								</form>
+							{% endif %}
+					{% endfor %}
+				</ul>
+				<form role="form" method='POST' action='/generate'>
+					<input value="false" name="new" hidden='true'>
+					<input type="num" name="last_round" hidden="true" value={{round}}>
+					<button id='new_round'>Next round</button>
+				</form>
+				{% endfor %}
+			</ul>
+		</div>
+	</BODY>
+</html>
